@@ -1,75 +1,74 @@
-# Iowa Enterprise Service Portal
+# Service Desk
 
-An accessible, responsive service management application for handling citizen requests across government departments. The project is an independently developed portfolio demonstration using realistic mock data. **It is not an official Iowa state application and is not affiliated with the State of Iowa.**
+A responsive request-management workspace for internal service teams. It runs with realistic demo records and browser-local storage; there is no backend or authentication service in this project.
 
 ## Screenshots
 
-Add genuine screenshots captured from a running local build to `docs/screenshots/` and link them here. Suggested captures: desktop dashboard, filtered request list, request details, create request form, and narrow mobile layout. Do not use illustrative mockups as evidence of the running application.
-
-## Technology
-
-- Angular 19 standalone components and routing, TypeScript strict mode, RxJS
-- Angular Material package and theme foundation; Bootstrap 5 utilities and Sass
-- Native semantic HTML tables and forms with SCSS design tokens
-- Local browser storage behind an injectable request store; no backend is included
-- Angular CLI/Karma/Jasmine test tooling
+Capture genuine screenshots from a local build and add them under `docs/screenshots/`. Suggested views are the dashboard, filtered request list, request details, create form, and narrow mobile layout. Screenshots should show the running application.
 
 ## Features
 
-- Dashboard metrics, request status distribution with visible text values, recent activity and requests
-- Search by request ID, citizen, category, or department; status/priority filters; sorting and pagination
-- Request details with citizen, assignment, status history, and activity summary
+- Request totals, status overview, recent activity, and recent requests
+- Search by request ID, requester, category, or team; filter by status and priority; sort and paginate
+- Request details with requester information, team assignment, status, and activity history
 - Create and edit requests, update status, and delete with confirmation
-- Responsive sidebar and mobile navigation; keyboard skip link, visible focus, reduced-motion support, and live feedback
-- Changes persist in browser `localStorage` under `iowa-service-portal-requests-v1`
+- Form error summaries, field-specific messages, labels, and focus management
+- Responsive navigation and layout; visible keyboard focus and reduced-motion support
+- Updates persist in `localStorage`; data written under the previous demo key is migrated to the Service Desk key
+- Subtle entry/exit transitions, stat reveals, row updates, chart bars, and a profile popover
 
-## Architecture
+## Technology and dependencies
+
+- Angular 20.3.35 standalone components and TypeScript 5.9.3 strict mode
+- Angular CLI and build tooling 20.3.42
+- RxJS is used through Angular’s framework dependency; this app does not import it directly
+- Jasmine/Karma tests and axe-core browser checks
+- Exact direct dependency versions are pinned in `package.json`; `package-lock.json` records the full dependency tree
+
+Angular 20 supports Node.js `^20.19.0`, `^22.12.0`, or `^24.0.0`; this project’s TypeScript 5.9.3 is within Angular 20’s supported `>=5.8 <6.0` range. See [Angular’s version compatibility table](https://angular.dev/reference/versions).
+
+Angular’s published schedule currently lists Angular 20 support through November 21, 2026. The requested Angular 20 line is pinned deliberately; review the supported-version schedule before future releases.
+
+## Structure
 
 ```text
 src/app/
-  app.component.*             Application shell and feature presentation
-  models/service-request.ts   Request and status types
-  services/request-store.service.ts  Mock repository and persistence boundary
-  app.routes.ts               Angular route configuration
-  app.config.ts               Application providers
-src/styles.scss               Bootstrap import and global accessibility styles
-accessibility/                WCAG checklist and verification record
+  app.component.*                   Application shell and request views
+  models/service-request.ts         Request and status types
+  services/request-store.service.ts Demo repository, persistence, and data migration
+  services/request-store.service.spec.ts
+  app.component.spec.ts             Request workflow tests
+  accessibility.spec.ts             axe-core view checks
+src/styles.scss                     Global type, focus, and skip-link styles
 ```
 
-The `RequestStoreService` is the future integration boundary for an ASP.NET Core Web API. Replace its local read/write methods with typed `HttpClient` calls and configure the API base URL, authentication, authorization, server validation, and error handling. No .NET service or API is present in this demonstration.
+The request store is the boundary for a future API. Replace its local-storage reads/writes with typed HTTP calls and add server validation, authentication, authorization, and error handling as needed.
 
 ## Run locally
 
-Requirements: Node.js supported by Angular 19 (Node 18.19+, 20.11+, or 22.0+), npm.
+Use a Node version supported by Angular 20, then run:
 
 ```bash
-npm install
+npm ci
 npm start
 ```
 
-Open the local URL printed by Angular CLI (normally `http://localhost:4200`). The environment used to scaffold this project has Node 24.13.0, which Angular CLI 19 reports as unsupported; use a supported Node release for reliable development.
+Angular CLI prints the local URL (normally `http://localhost:4200`).
 
-## Commands
+## Verification
 
 ```bash
-npm start                 # Development server
-npm run build             # Production build
-npm test                  # Karma/Jasmine tests in a browser
-npm run test:accessibility # axe-core browser checks (when configured)
+npm run build              # Passed: Angular production build
+npm run test:accessibility # Passed: 11 ChromeHeadless tests
 ```
 
 ## Accessibility
 
-The interface uses native landmarks, heading structure, labeled form controls, table captions and scoped headers, non-color status text, visible focus, keyboard activation, an error/status live region, and responsive zoom-friendly layouts. See [the WCAG checklist](accessibility/WCAG-CHECKLIST.md) and [testing report](accessibility/TESTING-REPORT.md) for the addressed criteria and verification limits.
+The application uses semantic landmarks and tables, explicit form labels with field-linked validation, visible keyboard focus, text status labels, a native modal dialog, and reduced-motion styles. axe-core checks the dashboard, request list, request details, profile popover, and create dialog. These automated checks do not establish full WCAG conformance; manual keyboard, screen-reader, zoom, and responsive checks remain.
 
-## Known limitations
+## Limitations
 
-- Sample records are fictional, and browser-local data is not shared, backed up, or suitable for real citizen information.
-- Authentication, roles, server-side validation, attachments, and API integration are not implemented.
-- The form checks required values and basic email format on save; richer per-field inline errors and a field-linked error summary remain to be completed.
-- Modal keyboard focus containment/restoration and assistive technology behavior require manual verification before production use.
-- No WCAG conformance claim is made. Consult the testing report for checks actually run.
-
-## Future work
-
-Connect the repository service to a documented ASP.NET Core API, add server validation and authorization, implement robust async loading/error states, add a maintained axe-core test suite, and conduct keyboard, zoom, screen reader, contrast, and mobile assistive technology testing.
+- Demo records are fictional and stored only in the current browser profile.
+- Login, role permissions, server validation, attachments, and API integration are not included.
+- The local mock data loads synchronously, so there is no artificial loading delay or skeleton state. Add skeletons when an asynchronous data source is connected.
+- Screen-reader, manual keyboard, zoom/reflow, and full responsive review still need human verification.

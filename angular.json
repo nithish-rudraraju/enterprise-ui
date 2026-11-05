@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "enterprise-ui": {
+    "service-desk": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/enterprise-ui",
+            "outputPath": "dist/service-desk",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -41,12 +41,12 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "750kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "500kB",
+                  "maximumError": "700kB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "18kB",
+                  "maximumWarning": "20kB",
                   "maximumError": "22kB"
                 }
               ],
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "enterprise-ui:build:production"
+              "buildTarget": "service-desk:build:production"
             },
             "development": {
-              "buildTarget": "enterprise-ui:build:development"
+              "buildTarget": "service-desk:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -98,5 +98,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
